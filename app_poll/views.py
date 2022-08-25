@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from app_poll.models import  User
+from app_poll.models import User
 
 # Create your views here.
 def index(request):
@@ -14,10 +14,11 @@ def login_user(request):
         if request.method == 'POST':
             try:
                 uid = User.objects.get(email = request.POST['email'])
+                print(uid)
                 if request.POST['password'] ==  uid.password:
                     request.session['email'] = request.POST['email']
                     session_user_data = User.objects.get(email = request.session['email'])
-                    return render(request, 'poll_list.html')
+                    return render(request, 'polls_list.html')
                 else:
                     return render(request, 'login.html',{'msg':'Password Incorrect!!'})
             except:
@@ -25,7 +26,12 @@ def login_user(request):
         return render(request, 'login.html')
 
 def logout_user(request):
-    return render(request, 'login.html')
+    try:
+        request.session['email']
+        del request.session['email']
+        return render(request, 'login.html', {'msg':'Successfully Logged Out'})
+    except:
+        return render(request,'login.html',{'msg':'Cannot logout without login'})
 
 
 def create_user(request):
@@ -35,7 +41,7 @@ def create_user(request):
             return render(request, 'register.html',{'msg':'Email is already registered'})
         except:
             User.objects.create(
-                fullname = request.POST['fname'],
+                fullname = request.POST['fullname'],
                 email = request.POST['email'],
                 password = request.POST['password'],
             )
