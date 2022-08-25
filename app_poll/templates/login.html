@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="row center">
+        <div class="col-md-6 offset-md-3">
+            {% if msg %}
+            <div class="messages">
+                <div>{{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            </div>
+            {% endif %}
+            <form action="{% url 'login' %}" method="POST">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" class="form-control" name="username" placeholder="Enter Username">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" class="form-control" name="password" placeholder="Password">
+                </div>
+                <button type="submit" class="btn btn-primary">Login</button>
+                <p>Need an account? <a href="{% url 'register' %}">Register Here</a></p>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
